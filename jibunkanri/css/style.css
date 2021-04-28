@@ -114,6 +114,10 @@ td {
 	text-align: center;
 }
 
+td.pointer {
+	cursor: pointer;
+}
+
 /* フッター */
 
 footer {

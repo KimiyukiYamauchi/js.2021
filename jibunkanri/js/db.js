@@ -102,7 +102,7 @@ function getDayData() {
     // カーソルから結果文字列を作成
     let resultStr = "";
     resultStr += "<input class='deleteBtn' type='button' value='削除'";
-    resultStr += ">";
+    resultStr += " onclick='deleteValue(" + cursor.value.yyyymmddhhmm + ")'>";
     resultStr += "&nbsp;";
     resultStr += cursor.value.hour + ":" + cursor.value.minute;
     resultStr += "<p>" + cursor.value.memo + "</p><hr>";
@@ -114,5 +114,28 @@ function getDayData() {
   // 失敗：リクエスト(openCursor)
   request.onerror = function (event) {
     console.error(event.target.errorCode);
+  }
+}
+
+// データを削除する関数
+function deleteValue(key) {
+  if (confirm("このデータを削除します。よろしいですか？")) {
+
+    // 確保：トランザクション
+    const transaction = db.transaction([DB_STORE], "readwrite");
+    // 取得：オブジェクトストアー
+    const store = transaction.objectStore(DB_STORE);
+    // 実行：リクエスト(delete)
+    const request = store.delete(String(key));
+
+    // 成功：リクエスト(delete)
+    request.onsuccess = function () {
+      // データ再表示
+      getDayData();
+    }
+    // 失敗：リクエスト(delete)
+    request.onerror = function (event) {
+      console.error(event.target.errorCode);
+    }
   }
 }

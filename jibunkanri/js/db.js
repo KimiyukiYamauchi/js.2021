@@ -139,3 +139,29 @@ function deleteValue(key) {
     }
   }
 }
+
+// 指定年月日範囲のデータを削除
+function deleteMonthData(year, month) {
+  if (confirm(year + " 年 " + month + " 月のデータを削除します。よろしいですか？")) {
+
+    // パラメータの設定
+    let lowerKey = String(year) + (("0" + month).slice(-2)) + "000000";
+    let upperKey = String(year) + (("0" + month).slice(-2)) + "999999";
+
+    // 確保：トランザクション
+    const transaction = db.transaction([DB_STORE], "readwrite");
+    // 取得：オブジェクトストアー
+    const store = transaction.objectStore(DB_STORE);
+    const request = store.delete(IDBKeyRange .bound(lowerKey, upperKey));
+
+    // 成功：リクエスト(delete)
+    request.onsuccess = function() {
+      alert(year + " 年 " + month + " 月 のデータを削除しました。");
+    }
+
+    // 失敗：リクエスト(delete)
+    request.onerror = function(event) {
+      console.error(event.target.errorCode);
+    }
+  }
+}

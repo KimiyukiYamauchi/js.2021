@@ -22,6 +22,7 @@ function initDB() {
   // 成功：DBオープン
   openRequest.onsuccess = function (event) {
     console.log("IndexedDB のオープンに成功しました。");
+    db = event.target.result;
   }
 
   // 失敗：DBオープン

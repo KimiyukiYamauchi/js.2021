@@ -69,4 +69,50 @@ function setValue() {
     console.error(event.target.errorCode);
   }
 
+  // データ再表示(リクエスト(put)の成功失敗に関わらず)
+  getDayData();
+
+}
+
+// インデックスを用いて取得する関数
+function getDayData() {
+
+  // パラメータ設定
+  let day = sessionStorage.getItem("day");
+  let idx = String(year) + (("0" + month).slice(-2)) + (("0" + day).slice(-2));
+
+  // 結果出力個所の初期化
+  const result = document.getElementById("result");
+  result.innerHTML = "";
+
+  // 確保：トランザクション
+  const transaction = db.transaction([DB_STORE], "readonly");
+  // 取得：オブジェクトストアー
+  const store = transaction.objectStore(DB_STORE);
+  // 実行：リクエスト(openCursor)
+  const request = store.index("yyyymmdd").openCursor(IDBKeyRange.only(idx));
+
+  // 成功：リクエスト(openCursor)
+  request.onsuccess = function (event) {
+    // これ以上結果がなければ終了
+    if (event.target.result == null) return;
+
+    // カーソルの取得
+    const cursor = event.target.result;
+    // カーソルから結果文字列を作成
+    let resultStr = "";
+    resultStr += "<input class='deleteBtn' type='button' value='削除'";
+    resultStr += ">";
+    resultStr += "&nbsp;";
+    resultStr += cursor.value.hour + ":" + cursor.value.minute;
+    resultStr += "<p>" + cursor.value.memo + "</p><hr>";
+
+    result.innerHTML += resultStr;
+
+    cursor.continue();
+  }
+  // 失敗：リクエスト(openCursor)
+  request.onerror = function (event) {
+    console.error(event.target.errorCode);
+  }
 }

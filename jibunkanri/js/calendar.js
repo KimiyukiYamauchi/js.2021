@@ -99,4 +99,7 @@ function selectDay(e) {
   // 選択した日付をセッションストレージに格納
   sessionStorage.setItem("day", day);
 
+  // 選択した日付のデータ(同一インデックス)を表示
+  getDayData();
+
 }

@@ -54,7 +54,9 @@ function makeCalendar(year, month) {
         || checkHoliday(year, month, j)
         || checkFurikae(year, month, j)
     ) {
-      str += ' class = "holiday"';
+      str += ' class = "holiday pointer" ';
+    } else {
+      str += ' class = "pointer" ';
     }
 
     // 日付選択時の処理

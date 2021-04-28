@@ -15,7 +15,7 @@ function initDB() {
     // 作成：オブジェクトストアー
     let store = db.createObjectStore(DB_STORE, {keyPath: "yyyymmddhhmm"});
     // 作成：インデックス
-    store.createIndex("yyyymmdd", "yyyymmdd", {unique: "yyyymmddhhmm"});
+    store.createIndex("yyyymmdd", "yyyymmdd", {unique: false});
     console.log("IndexedDBの準備(新規作成/バージョン更新)が完了しました。");
   }
 

@@ -82,7 +82,7 @@ function resetFontColor() {
   changeFontColor();
 }
   
-// ローカルストレージの設定色を画面に反映する関数(背景色)
+// ローカルストレージの設定色を画面に反映する関数(文字色)
 function setFontColor() {
   // ローカルストレージ内のデータ有無確認
   if (localStorage.getItem('main-font-color_B') == null) {

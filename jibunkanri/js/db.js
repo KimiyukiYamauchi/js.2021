@@ -191,3 +191,54 @@ function deleteAll() {
   }
 }
 
+// 指定年月のデータ件数を取得する関数
+function getMonthDataCount(year, month) {
+
+  // パラメータの設定
+  let lowerKey = String(year) + (("0" + month).slice(-2)) + "000000";
+  let upperKey = String(year) + (("0" + month).slice(-2)) + "999999";
+
+  // 確保：トランザクション
+  const transaction = db.transaction([DB_STORE], "readonly");
+  // 取得：オブジェクトストアー
+  const store = transaction.objectStore(DB_STORE);
+  // 実行：リクエスト(count)
+  const request = store.count(IDBKeyRange.bound(lowerKey, upperKey));
+
+  // 成功：リクエスト(count)
+  request.onsuccess = function (event) {
+    let dataCount = String(request.result);
+    alert(year + " 年 " + month + " 月 のデータ件数は " + dataCount + " 件です。");
+  }
+  // 失敗：リクエスト(count)
+  request.onerror = function(event) {
+    console.error(event.target.errorCode);
+  }
+}
+
+// 全てのデータをJSON形式で出力する関数
+function outputData() {
+  if (confirm("全てのデータをJSON形式で出力します。よろしいですか？")) {
+
+    // 確保：トランザクション
+    const transaction = db.transaction([DB_STORE], "readonly");
+    // 取得：オブジェクトストアー
+    const store = transaction.objectStore(DB_STORE);
+    // 実行：リクエスト(getAll)
+    const request = store.getAll();
+
+    // 成功：リクエスト(getAll)
+    request.onsuccess = function (event) {
+      // JSON データに変換
+      let json = JSON.stringify(event.target.result);
+      // JSON データを Blob オブジェクトに変換
+     var blob = new Blob([ json ], { "type" : "application/json" });
+     // BlobオブジェクトをURL化してページ遷移
+     document.location.href = URL.createObjectURL(blob);
+    }
+    // 失敗：リクエスト(getAll)
+    request.onerror = function (event) {
+      console.error(event.target.errorCode);
+    }
+  }
+}

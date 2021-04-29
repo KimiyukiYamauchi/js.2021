@@ -165,3 +165,29 @@ function deleteMonthData(year, month) {
     }
   }
 }
+
+// 全てのデータを削除する関数
+function deleteAll() {
+  if (confirm("全てのデータを削除します。よろしいですか？")) {
+
+    // 確保：トランザクション
+    const transaction = db.transaction([DB_STORE], "readwrite");
+    // 取得：オブジェクトストアー
+    const store = transaction.objectStore(DB_STORE);
+    // 実行：リクエスト(clear)
+    const request = store.clear();
+
+    // 成功：リクエスト(clear)
+    request.onsuccess = function() {
+      // ストレージもクリア
+      sessionStorage.clear();
+      localStorage.clear();
+      alert("全てのデータを削除しました");
+    }
+    // 失敗：リクエスト(clear)
+    request.onerror = function (event) {
+      console.error(event.target.errorCode);
+    }
+  }
+}
+

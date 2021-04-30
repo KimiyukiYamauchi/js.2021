@@ -24,8 +24,14 @@ function makeCalendar(year, month) {
   str += '<tr>';
 
   // その月の第一日目が始まる曜日まで空白を埋める
-  for (let i = 0; i < firstDay; i++) {
+/*   for (let i = 0; i < firstDay; i++) {
     str += '<td>&nbsp;</td>';
+  }
+ */
+  // 最初の週の前月分
+  let beforeday = new Date(year, month - 1, -firstDay).getDate() + 1;
+  for (let i = 0; i <firstDay; i++) {
+    str += '<td class="gray">' + (beforeday++) + '</td>';
   }
 
   // その月の日数分のループ
@@ -67,10 +73,15 @@ function makeCalendar(year, month) {
   }
 
   // その月の最終日以降を空白で埋める
-  for (let k = 0; k < (6 - lastDay); k++) {
+/*   for (let k = 0; k < (6 - lastDay); k++) {
     str += '<td>&nbsp;</td>';
   }
-
+ */
+  // 最後の週の翌月分
+  for (let i = lastDay + 1, afterday = 1; i <7; i++) {
+    str += '<td class="gray">' + (afterday++) + '</td>';
+  }
+  
   str += '</tr>';
   str += '</table>';
 

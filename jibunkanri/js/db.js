@@ -119,76 +119,109 @@ function getDayData() {
 
 // データを削除する関数
 function deleteValue(key) {
-  if (confirm("このデータを削除します。よろしいですか？")) {
+  // if (confirm("このデータを削除します。よろしいですか？")) {
+  // ダイアログ表示
+  $('#dialogDeleteStart').dialog({
+    modal: true,
+    title: ("選択したデータ"),
+    buttons: {"削除する": function() {
+      // 確保：トランザクション
+      const transaction = db.transaction([DB_STORE], "readwrite");
+      // 取得：オブジェクトストアー
+      const store = transaction.objectStore(DB_STORE);
+      // 実行：リクエスト(delete)
+      const request = store.delete(String(key));
 
-    // 確保：トランザクション
-    const transaction = db.transaction([DB_STORE], "readwrite");
-    // 取得：オブジェクトストアー
-    const store = transaction.objectStore(DB_STORE);
-    // 実行：リクエスト(delete)
-    const request = store.delete(String(key));
-
-    // 成功：リクエスト(delete)
-    request.onsuccess = function () {
-      // データ再表示
-      getDayData();
-    }
-    // 失敗：リクエスト(delete)
-    request.onerror = function (event) {
-      console.error(event.target.errorCode);
-    }
-  }
+      // 成功：リクエスト(delete)
+      request.onsuccess = function () {
+        // データ再表示
+        getDayData();
+      }
+      // 失敗：リクエスト(delete)
+      request.onerror = function (event) {
+        console.error(event.target.errorCode);
+      }
+    // }
+      $(this).dialog("close");
+    }}
+  });
 }
 
 // 指定年月日範囲のデータを削除
 function deleteMonthData(year, month) {
-  if (confirm(year + " 年 " + month + " 月のデータを削除します。よろしいですか？")) {
+  // if (confirm(year + " 年 " + month + " 月のデータを削除します。よろしいですか？")) {
+  // ダイアログ表示
+  $("#dialogDeleteStart").dialog({
+    modal: true,
+    title: (year + " 年 " + month + " 月 のデータ"),
+    buttons: {"削除する": function() {
+      // パラメータの設定
+      let lowerKey = String(year) + (("0" + month).slice(-2)) + "000000";
+      let upperKey = String(year) + (("0" + month).slice(-2)) + "999999";
 
-    // パラメータの設定
-    let lowerKey = String(year) + (("0" + month).slice(-2)) + "000000";
-    let upperKey = String(year) + (("0" + month).slice(-2)) + "999999";
+      // 確保：トランザクション
+      const transaction = db.transaction([DB_STORE], "readwrite");
+      // 取得：オブジェクトストアー
+      const store = transaction.objectStore(DB_STORE);
+      const request = store.delete(IDBKeyRange .bound(lowerKey, upperKey));
 
-    // 確保：トランザクション
-    const transaction = db.transaction([DB_STORE], "readwrite");
-    // 取得：オブジェクトストアー
-    const store = transaction.objectStore(DB_STORE);
-    const request = store.delete(IDBKeyRange .bound(lowerKey, upperKey));
+      // 成功：リクエスト(delete)
+      request.onsuccess = function() {
+        // alert(year + " 年 " + month + " 月 のデータを削除しました。");
+        // ダイアログ表示
+        $("#dialogDeleteEnd").dialog({
+          modal: true,
+          title: (year + " 年 " + month + " 月 のデータ"),
+          buttons: {"OK": function() {$(this).dialog("close");}}
+        });
+      }
 
-    // 成功：リクエスト(delete)
-    request.onsuccess = function() {
-      alert(year + " 年 " + month + " 月 のデータを削除しました。");
-    }
-
-    // 失敗：リクエスト(delete)
-    request.onerror = function(event) {
-      console.error(event.target.errorCode);
-    }
-  }
+      // 失敗：リクエスト(delete)
+      request.onerror = function(event) {
+        console.error(event.target.errorCode);
+      }
+  // }
+      $(this).dialog("close");
+    }}
+  });
 }
 
 // 全てのデータを削除する関数
 function deleteAll() {
-  if (confirm("全てのデータを削除します。よろしいですか？")) {
+  // if (confirm("全てのデータを削除します。よろしいですか？")) {
+  // ダイアログ表示
+  $("#dialogDeleteStart").dialog ({
+    modal: true,
+    title: ("全てのデータ"),
+    buttons: {"削除する": function() {
+      // 確保：トランザクション
+      const transaction = db.transaction([DB_STORE], "readwrite");
+      // 取得：オブジェクトストアー
+      const store = transaction.objectStore(DB_STORE);
+      // 実行：リクエスト(clear)
+      const request = store.clear();
 
-    // 確保：トランザクション
-    const transaction = db.transaction([DB_STORE], "readwrite");
-    // 取得：オブジェクトストアー
-    const store = transaction.objectStore(DB_STORE);
-    // 実行：リクエスト(clear)
-    const request = store.clear();
-
-    // 成功：リクエスト(clear)
-    request.onsuccess = function() {
-      // ストレージもクリア
-      sessionStorage.clear();
-      localStorage.clear();
-      alert("全てのデータを削除しました");
-    }
-    // 失敗：リクエスト(clear)
-    request.onerror = function (event) {
-      console.error(event.target.errorCode);
-    }
-  }
+      // 成功：リクエスト(clear)
+      request.onsuccess = function() {
+        // ストレージもクリア
+        sessionStorage.clear();
+        localStorage.clear();
+        // alert("全てのデータを削除しました");
+        // ダイアログ表示
+        $("#daialogDeleteEnd").dialog ({
+          modal: true,
+          title: ("全てのデータ"),
+          buttons: {"OK": function() {$(this).dialog("close");}}
+        });
+      }
+      // 失敗：リクエスト(clear)
+      request.onerror = function (event) {
+        console.error(event.target.errorCode);
+      }
+  // }
+      $(this).dialog("close");
+    }}
+  });
 }
 
 // 指定年月のデータ件数を取得する関数
@@ -208,7 +241,15 @@ function getMonthDataCount(year, month) {
   // 成功：リクエスト(count)
   request.onsuccess = function (event) {
     let dataCount = String(request.result);
-    alert(year + " 年 " + month + " 月 のデータ件数は " + dataCount + " 件です。");
+    // alert(year + " 年 " + month + " 月 のデータ件数は " + dataCount + " 件です。");
+    // ダイアログ表示
+    document.getElementById("monthDataCount").innerHTML = "データ件数は " + dataCount + " 件です。";
+    $("#monthDataCountStart").dialog({
+      modal: true,
+      title: (year + " 年 " + month + " 月 のデータ件数"),
+      buttons: {"OK": function() {$(this).dialog("close");
+    }}
+    });
   }
   // 失敗：リクエスト(count)
   request.onerror = function(event) {
@@ -218,27 +259,34 @@ function getMonthDataCount(year, month) {
 
 // 全てのデータをJSON形式で出力する関数
 function outputData() {
-  if (confirm("全てのデータをJSON形式で出力します。よろしいですか？")) {
+  // if (confirm("全てのデータをJSON形式で出力します。よろしいですか？")) {
+  // ダイアログ表示
+  $("#outputDataStart").dialog({
+    modal: true,
+    title: ("JSON形式で出力"),
+    buttons: {"出力する": function() {
+      // 確保：トランザクション
+      const transaction = db.transaction([DB_STORE], "readonly");
+      // 取得：オブジェクトストアー
+      const store = transaction.objectStore(DB_STORE);
+      // 実行：リクエスト(getAll)
+      const request = store.getAll();
 
-    // 確保：トランザクション
-    const transaction = db.transaction([DB_STORE], "readonly");
-    // 取得：オブジェクトストアー
-    const store = transaction.objectStore(DB_STORE);
-    // 実行：リクエスト(getAll)
-    const request = store.getAll();
-
-    // 成功：リクエスト(getAll)
-    request.onsuccess = function (event) {
-      // JSON データに変換
-      let json = JSON.stringify(event.target.result);
-      // JSON データを Blob オブジェクトに変換
-     var blob = new Blob([ json ], { "type" : "application/json" });
-     // BlobオブジェクトをURL化してページ遷移
-     document.location.href = URL.createObjectURL(blob);
-    }
-    // 失敗：リクエスト(getAll)
-    request.onerror = function (event) {
-      console.error(event.target.errorCode);
-    }
-  }
+      // 成功：リクエスト(getAll)
+      request.onsuccess = function (event) {
+        // JSON データに変換
+        let json = JSON.stringify(event.target.result);
+        // JSON データを Blob オブジェクトに変換
+      var blob = new Blob([ json ], { "type" : "application/json" });
+      // BlobオブジェクトをURL化してページ遷移
+      document.location.href = URL.createObjectURL(blob);
+      }
+      // 失敗：リクエスト(getAll)
+      request.onerror = function (event) {
+        console.error(event.target.errorCode);
+      }
+  // }
+      $(this).dialog("close");
+    }}
+  });
 }

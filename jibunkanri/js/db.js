@@ -30,15 +30,27 @@ function initDB() {
     console.log("IndexedDB のオープンに失敗しました。")
   }
 }
+// サニタイジング(&, <, >, ", ')
+sanitaize = {
+  encode : function (str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
 
+  decode : function (str) {
+    return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
+  }
+};
 // DBに値を登録する関数
 function setValue() {
 
   // パラメータの設定
   let day = sessionStorage.getItem("day");
   let hour = document.getElementById("hour").value;
+  hour = sanitaize.encode(hour);
   let minute = document.getElementById("minute").value;
+  minute = sanitaize.encode(minute);
   let memo = document.getElementById("memo").value;
+  memo = sanitaize.encode(memo);
   let idx = String(year) + (("0" + month).slice(-2)) + (("0" + day).slice(-2));
   let key = idx + hour + minute;
 

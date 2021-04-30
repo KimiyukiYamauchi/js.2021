@@ -4,6 +4,7 @@
   <title>ジブンカンリ</title>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/style.css" type="text/css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/overcast/jquery-ui.css">
   <style type="text/css">
     #sun {
       background-color: #ff3d00;
@@ -23,6 +24,11 @@
   </style>
 </head>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/calendar.js"></script>
 <script type="text/javascript" src="js/holiday.js"></script>
 <script type="text/javascript" src="js/config.js"></script>
@@ -76,7 +82,7 @@
   function showConfigArea() {
     document.getElementById('calendar').style.display = "none";
     document.getElementById('inputArea').style.display = "none";
-    document.getElementById('configArea').style.display = "inline";
+    // document.getElementById('configArea').style.display = "inline";
   }
 </script>
 
@@ -154,6 +160,18 @@
           <a href="javascript:deleteAll();">リセット</a>
         </li>
       </ul>  
+    </div>
+    <div id="dialogDeleteStart" style="display: none;">
+      <p>上記データを削除します。<br>よろしいですか？</p>
+    </div>
+    <div id="dialogDeleteEnd" style="display: none;">
+      <p>上記データの削除が<br>完了しました。</p>
+    </div>
+    <div id="monthDataCountStart" style="display: none;">
+      <p id="monthDataCount"></p>
+    </div>
+    <div id="outputDataStart" style="display: none;">
+      <p>全てのデータを<br>JSON形式で出力します。<br>よろしいですか？</p>
     </div>
   </div>
 </main>  

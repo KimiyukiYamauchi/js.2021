@@ -11,7 +11,7 @@ function initDB() {
   // DB が存在しない(DB 新規作成/更新)
   openRequest.onupgradeneeded = function (event) {
     db = event.target.result;
-    console.log(db);
+    // console.log(db);
     // 作成：オブジェクトストアー
     let store = db.createObjectStore(DB_STORE, {keyPath: "yyyymmddhhmm"});
     // 作成：インデックス
@@ -43,7 +43,7 @@ function setValue() {
   let key = idx + hour + minute;
 
   // 確保：トランザクション
-  console.log(db);
+  // console.log(db);
   const transaction = db.transaction([DB_STORE], "readwrite");
   // 取得：オブジェクトストアー
   const store = transaction.objectStore(DB_STORE);

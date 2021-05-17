@@ -1,0 +1,25 @@
+body {
+  font-family: 'Courier New', monospace;
+}
+
+#main {
+  background-color: #ccc;
+  width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+p {
+  font-size: 80px;
+}
+
+th, td {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 40px;
+}
+
+td {
+  background: pink;
+}

@@ -9,8 +9,13 @@ body {
   margin-right: auto;
 }
 
-p {
+p#decimal {
   font-size: 80px;
+}
+
+p#binary {
+  font-size: 20px;
+  text-align: right;
 }
 
 th, td {
